@@ -1,0 +1,3 @@
+/tree/projects/github/casio-fx702p/firmware/fx702p_ram_trace/build/pioasm/CMakeFiles/rebuild_cache.dir
+/tree/projects/github/casio-fx702p/firmware/fx702p_ram_trace/build/pioasm/CMakeFiles/edit_cache.dir
+/tree/projects/github/casio-fx702p/firmware/fx702p_ram_trace/build/pioasm/CMakeFiles/pioasm.dir

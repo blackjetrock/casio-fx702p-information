@@ -1,0 +1,34 @@
+
+
+Tokens
+======
+
+10       ?
+13       `  (back quote)
+28       ?
+29       ?
+2A       ?
+
+5A       ?
+5B       ?
+5C       ?
+5D       ?
+
+A0       ROM
+
+AF       CLR
+
+B2       ????
+B3       ????
+
+C0-C3    blank
+C4       ????
+CA       ????
+CB-CF    blank
+
+F4       L?`o   (degree symbol at end)
+F5       ??3-
+F6       O?<2
+F7       )+KC
+F8       ,:(#
+F9       ????
