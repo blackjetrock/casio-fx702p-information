@@ -288,8 +288,9 @@ void cli_dump_gpio_grab(void)
 
 void cli_follow(void)
 {
-
-  int data_bits_to_go = 10;
+  printf("\nFollowing data stream...\n");
+  
+  int data_bits_to_go = 6;
   int dataword = 0;
 
   int done = 0;
@@ -303,6 +304,7 @@ void cli_follow(void)
   int sp   = (gpio_grab & (1<<PIN_SP  )) >> PIN_SP;
 
   int last_sp = sp;
+  int transfer_done = 0;
   
   while(!done)
     {
@@ -328,20 +330,78 @@ void cli_follow(void)
 	      
 	      if(data_bits_to_go == 0 )
 		{
-		  printf("\n%04X", dataword);
-		  switch(dataword)
+		  if( transfer_done )
 		    {
-		    case 0x04:
-		      printf("  Read status");
-		      dataword = 0;
-		      break;
-		      
-		    case 0x02CD:
-		      printf("  header");
+		      transfer_done = 0;
+		      printf("  transfer data:%05X", dataword);
 		      
 		      data_bits_to_go = 6;
 		      dataword = 0;
-		      break;
+		    }
+		  else
+		    {
+		      printf("\n%04X", dataword);
+		      switch(dataword)
+			{
+			case 0x00:
+			  printf("  reset");
+			  data_bits_to_go = 6;
+			  dataword = 0;
+			  break;
+
+			case 0x04:
+			  printf("  Read status");
+			  dataword = 0;
+			  data_bits_to_go = 2;
+			  break;
+			  
+			case 0x18:
+			  printf("  Open for read");
+			  
+			  data_bits_to_go = 6;
+			  dataword = 0;
+			  break;
+
+			case 0x22:
+			  printf("  transfer");
+			  data_bits_to_go = 17;
+			  dataword = 0;
+			  transfer_done = 1;
+			  break;
+
+			case 0x24:
+			  printf("  Carrier detected");
+			  data_bits_to_go = 6;
+			  dataword = 0;
+			  break;
+
+			case 0x28:
+			  printf("  Open for write");
+			  
+			  data_bits_to_go = 6;
+			  dataword = 0;
+			  break;
+
+			case 0x3C:
+			  printf("  Close");
+			  
+			  data_bits_to_go = 6;
+			  dataword = 0;
+			  break;
+			  
+			case 0x02C9:
+			case 0x02CD:
+			  printf("  header");
+			  
+			  data_bits_to_go = 6;
+			  dataword = 0;
+			  break;
+			  
+			default:
+			  data_bits_to_go = 6;
+			  dataword = 0;
+			  break;
+			}
 		    }
 		}
 	    }
@@ -610,7 +670,7 @@ void serial_loop()
       // So, if we get a timeout we send a spoace and backspace it. And
       // flush the stdio, but that didn't fix the problem but seems like a good idea.
       stdio_flush();
-      printf(" \b");
+
     }
 }
 
